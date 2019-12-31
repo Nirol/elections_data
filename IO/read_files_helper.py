@@ -1,6 +1,5 @@
 import csv
 from enum import Enum
-
 import pandas as pd
 
 _YESHUVIM_CODE_LIST_FILE_PATH = "Data/yeshuv/yeshuvs_list_elections.csv"
@@ -55,6 +54,20 @@ class KnesetData:
 
     def get_kneset_list(self):
         return self.kneset_list
+
+    def save_dataframe_kneset(self):
+        self.kneset_18.to_csv( r'Data\Kneset\kneset_18.csv')
+        self.kneset_19.to_csv(r'Data\Kneset\kneset_19.csv')
+        self.kneset_20.to_csv(r'Data\Kneset\kneset_20.csv')
+        self.kneset_21.to_csv(r'Data\Kneset\kneset_21.csv')
+        self.kneset_22.to_csv(r'Data\Kneset\kneset_22.csv')
+
+    def load_kneset_data(self):
+        self.kneset_18 =  pd.read_csv("Data/Kneset/kneset_18.csv")
+        self.kneset_19 =  pd.read_csv("Data/Kneset/kneset_19.csv")
+        self.kneset_20 =  pd.read_csv("Data/Kneset/kneset_20.csv")
+        self.kneset_21 =  pd.read_csv("Data/Kneset/kneset_21.csv")
+        self.kneset_22 =  pd.read_csv("Data/Kneset/kneset_22.csv")
 
 
 class MetaData:
