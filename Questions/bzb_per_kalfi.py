@@ -1,86 +1,101 @@
-from scipy.stats import pearsonr
-
-from IO.read_files_helper import KnesetData, read_metadata_yeshuv_type_to_dict
-from Questions.population_statistics import PopulationStats
-from Questions.query_helper import Query, filter_df_by_query
+from IO.clean_kneset_data import BzbPerKalfiResult, \
+    BzbPerKalfiResult_AboveBZBRange
+from IO.edit_yeshuvim_data import add_yeshuv_type_kneset
+from IO.read_files_helper import KnesetData
+from Questions.GeneralPopStats.population_statistics import stats_population_kneset_df
+from Questions.query_helper import filter_df_by_query, GLOBAL_ABOVE_X_PPK_VAR
 import pandas as pd
 
 
+def clean_matafot_hitzoniot(kneset_to_clean):
+    matafot_kfolo_yeshuv_sn = [ 875,99999,9999]
 
-def find_in_dict(yeshuve_type_dict, sn_yeshuv):
-    key =  str(int(sn_yeshuv))
-    if  key in yeshuve_type_dict:
-        return yeshuve_type_dict[key]
-    return ""
+    knesett = kneset_to_clean.loc[~
+    kneset_to_clean['SN'].isin(matafot_kfolo_yeshuv_sn)]
 
-
-
-def add_yeshuv_type(kneset : pd.DataFrame):
-    kneset_type_dict = read_metadata_yeshuv_type_to_dict()
-    kneset['Yeshuv_Type'] = kneset.apply(lambda row: find_in_dict(kneset_type_dict, row["SN"]), axis=1)
+    return knesett
 
 
 
 
-def _clean_kneset_data_for_task(kneset : pd.DataFrame):
-    kneset = kneset.iloc[:, 1:7]
-    kneset.dropna(inplace=True)
-    kneset['vote_percent'] = kneset.apply(
+def _clean_kneset_data_for_task(kneset_to_clean : pd.DataFrame):
+    kneset_to_clean = kneset_to_clean.iloc[:, 0:7].copy()
+    kneset_to_clean.dropna(inplace=True)
+    kneset_to_clean = clean_matafot_hitzoniot(kneset_to_clean)
+    kneset_to_clean['vote_percent'] = kneset_to_clean.apply(
         lambda row: 100 * (row.Voters / row.BZB), axis=1)
-    add_yeshuv_type(kneset)
-
-class BzbPerKalfiResult(object):
-    pass
-
-
-def _filter_kneset_data_by_query_list(kneset_num, kneset, query_list,bzb_per_kalfi_result :BzbPerKalfiResult ):
-    for query in query_list:
-        kneset = filter_df_by_query(kneset, query)
-        print("Query: {}, filtered kalfi number down to:{}".format(query,len(kneset['SN'])))
-
-    bzb_per_kalfi_result.
-    kneset_stats = _stats_population_kneset_df(kneset)
-    pearson = _calculate_pearson_for_dict(kneset)
-    _scatter_plot(kneset)
+    add_yeshuv_type_kneset(kneset_to_clean)
+    return kneset_to_clean
 
 
 
-def calc_bzb_per_kalfi(kneset_data : KnesetData, query_list_of_lists):
-    bzb_per_kalfi_result = BzbPerKalfiResult()
+
+def _filter_kneset_data_by_query_list(kneset, query_list, threshold ):
+    if query_list:
+        for query in query_list:
+            knesett = filter_df_by_query(kneset, query, threshold)
+            kneset = knesett
+    else:
+        knesett = kneset
+    return knesett
+
+
+
+
+
+
+    
+
+
+def bzb_per_kalfi_per_kneset(kneset_data, query_list, bzb_per_kalfi_result : BzbPerKalfiResult, threshold=0) -> None:
     kneset_list = kneset_data.get_kneset_list()
     for kneset_num in kneset_list:
-        print("Now running Kneset: {}".format(kneset_num))
+
         kneset = kneset_data.get_kneset_df(kneset_num)
-        _clean_kneset_data_for_task(kneset)
-        for query_list in query_list_of_lists:
-            print("Query List: {}".format(query_list))
-            _filter_kneset_data_by_query_list(kneset_num, kneset, query_list, bzb_per_kalfi_result)
+
+        clean_kneset = _clean_kneset_data_for_task(kneset)
+
+        clean_filterd_kneset = _filter_kneset_data_by_query_list(clean_kneset, query_list, threshold )
+
+        stats = stats_population_kneset_df(clean_filterd_kneset)
+        bzb_per_kalfi_result.add_kneset(kneset_num, clean_filterd_kneset,
+                                        stats)
 
 
+def bzb_per_kalfi_per_kneset_threshold(kneset_data, query_list,
+                                       bzb_per_kalfi_result : BzbPerKalfiResult_AboveBZBRange):
+    for threshold in GLOBAL_ABOVE_X_PPK_VAR:
+        bzb_per_kalfi_result_per_threshold = BzbPerKalfiResult()
+        bzb_per_kalfi_per_kneset(kneset_data,query_list,bzb_per_kalfi_result_per_threshold,threshold)
+        bzb_per_kalfi_result.add_threshold_kneset_data(bzb_per_kalfi_result_per_threshold, threshold)
 
 
-
-def _stats_population_kneset_df(kneset_df):
-
-    num_kalfis_total = len(kneset_df['SN'])
-    num_unique_yeshuvim = len(set(kneset_df['SN']))
-    total_bzb= kneset_df['BZB'].sum()
-    total_voters = kneset_df['Voters'].sum()
-    filtered_population_stats = PopulationStats(num_kalfis_total, num_unique_yeshuvim, total_bzb,total_voters )
-    return filtered_population_stats
+def calc_bzb_per_kalfi_threshold(kneset_data : KnesetData, query_list_of_lists) -> BzbPerKalfiResult_AboveBZBRange:
+    bzb_per_kalfi_result  = None    
+    for query_list in query_list_of_lists:
+            bzb_per_kalfi_result = BzbPerKalfiResult_AboveBZBRange()
+            bzb_per_kalfi_per_kneset_threshold(kneset_data, query_list,
+                                     bzb_per_kalfi_result)
+    return bzb_per_kalfi_result
 
 
+def calc_bzb_per_kalfi(kneset_data : KnesetData, query_list_of_lists) -> BzbPerKalfiResult:
+    bzb_per_kalfi_result  = None
+    for query_list in query_list_of_lists:
+        bzb_per_kalfi_result = BzbPerKalfiResult()
+        bzb_per_kalfi_per_kneset(kneset_data,query_list, bzb_per_kalfi_result)
+    return bzb_per_kalfi_result
 
 
-
-
-def set_run():
+def set_run() -> BzbPerKalfiResult:
         kneset_data = KnesetData()
         kneset_data.load_kneset_data()
 
         query_list_of_lists =[]
 
-        query_list1=[Query.Arabs_Only, Query.Kalfi_Above_X]
+        query_list1=[]
         query_list_of_lists.append(query_list1)
 
         bzb_per_kalfi_result = calc_bzb_per_kalfi(kneset_data, query_list_of_lists)
+
+        return bzb_per_kalfi_result

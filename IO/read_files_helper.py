@@ -30,6 +30,7 @@ class KnesetData:
         self.kneset_21 = None
         self.kneset_22 = None
         self.kneset_list = None
+        self.kneset_list = ["18", "19", "20", "21", "22"]
 
     def update_kneset_data(self, kneset_18, kneset_19, kneset_20, kneset_21, kneset_22):
         self.kneset_18 = kneset_18
@@ -37,7 +38,7 @@ class KnesetData:
         self.kneset_20 = kneset_20
         self.kneset_21 = kneset_21
         self.kneset_22 = kneset_22
-        self.kneset_list = ["18", "19", "20", "21","22"]
+
 
     def get_kneset_df(self, kneset_num):
         if kneset_num == "18":

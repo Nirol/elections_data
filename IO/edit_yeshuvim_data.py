@@ -1,5 +1,5 @@
 from IO.read_files_helper import KnesetVars, read_metadata_yeshuv_type_to_dict
-
+import pandas as pd
 
 def _calc_var_dict_from_kneset_df(var_sum_dict, kneset_df, SN_yeshuv):
     for knese_enum_var in KnesetVars:
@@ -53,3 +53,17 @@ def add_yeshuv_type(yeshuvim):
     yeshuve_type_dict = read_metadata_yeshuv_type_to_dict()
     yeshuvim['Yeshuv_Type'] = yeshuvim.apply(
         lambda row: find_in_dict(yeshuve_type_dict, row["SN_yeshuv"]), axis=1)
+
+
+
+def find_in_dict(yeshuve_type_dict, sn_yeshuv):
+    key =  str(int(sn_yeshuv))
+    if  key in yeshuve_type_dict:
+        return yeshuve_type_dict[key]
+    return ""
+
+
+
+def add_yeshuv_type_kneset(kneset : pd.DataFrame):
+    kneset_type_dict = read_metadata_yeshuv_type_to_dict()
+    kneset['Yeshuv_Type'] = kneset.apply(lambda row: find_in_dict(kneset_type_dict, row["SN"]), axis=1)

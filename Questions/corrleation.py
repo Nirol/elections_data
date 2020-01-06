@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from Questions.query_helper import is_yeshuv_type_arab, is_yeshuv_single_kalfi, \
-    is_yeshuv_above_two_kalfi, _GLOBAL_ABOVE_X_PPK_VAR, Query
+    is_yeshuv_above_two_kalfi, GLOBAL_ABOVE_X_PPK_VAR, Query
 
 
 def _are_vars_valid(i_ppk, i_vote_percent_values):
@@ -183,7 +183,7 @@ def _corr_per_sn(yeshuvim,query):
 
 
 def calculate_corrleation(yeshuvim):
-    #_corr_per_sn(yeshuvim, Query.Total)
-    _corr_all_data(yeshuvim)
+    _corr_per_sn(yeshuvim, Query.Total)
+    #_corr_all_data(yeshuvim)
 
 
