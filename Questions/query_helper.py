@@ -4,7 +4,7 @@ import pandas as pd
 
 _ARABS_YESHUV_TYPES_LIST = ["250", "260", "270", "280", "290", "440", "450", "460"]
 _BADUIM = [460]
-GLOBAL_ABOVE_X_PPK_VAR =  list(range(150, 550, 50))
+
 ABOVE_X_IDX = 0
 
 class Query(Enum):

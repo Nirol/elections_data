@@ -44,6 +44,8 @@ class BzbPerKalfiResult():
     def __init__(self ):
         self.knesets_dict = {}
     #todo fix multi functions into a single getter
+
+
     def add_kneset(self, kneset_num :str, kneset : pd.DataFrame, kneset_stats: PopulationStats):
         tmp_kneset_dict = {"num": kneset_num,
                 'data': kneset,
@@ -98,6 +100,8 @@ class BzbPerKalfiResult_AboveBZBRange():
                                   threshold):
         self.threshold_kneset_dict_rang[threshold] = bzb_per_kalfi_result_per_threshold
 
+    def get_threshold_kneset_dict(self, threshold : int):
+        return self.threshold_kneset_dict_rang[threshold]
 
     def get_plot_idx_by_threshold(self, threshold):
         plot_title = "{}+ BZB".format(threshold)

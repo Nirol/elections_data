@@ -4,7 +4,7 @@ from numpy import nanstd
 from scipy.stats import pearsonr, ks_2samp, ttest_ind
 from scipy.stats import kendalltau
 import pandas as pd
-from IO.clean_kneset_data import BzbPerKalfiResult, PopulationStats, PopVars
+from IO.data_classes import BzbPerKalfiResult, PopulationStats, PopVars
 
 
 def graph_general_stat(x, bzb_per_kalfi_list, num_kalfi_list, unique_yeshuv,
