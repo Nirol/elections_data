@@ -2,9 +2,8 @@ from enum import Enum
 
 from matplotlib.pyplot import ylim
 
-from IO.data_classes import BzbPerKalfiResult, PopVars
+from Parse.data_classes import ResultKnesset
 import pandas as pd
-from matplotlib import pyplot as plt
 
 _BIG_YESHUV_INDEX = ['50-100', '20-50', '10-20', '5-10', '2-5']
 _SMALL_YESHUV_INDEX = ['מושב', 'מושב שיתופי', 'קיבוץ', 'כפר יהודי',
@@ -12,13 +11,8 @@ _SMALL_YESHUV_INDEX = ['מושב', 'מושב שיתופי', 'קיבוץ', 'כפ�
                        'כפר לא יהודי', 'שבט בדווי']
 
 
-class YeshuvType(Enum):
-    Big = 1
-    Others = 2
 
 
-class PlotType(Enum):
-    Vote_Percent = 1
 
 
 
@@ -283,9 +277,9 @@ def gather_data_by_yeshuve_type(kneset_data, x,
             into_percent_representation)
 
 
-def stats_grpd_by_yeshuv_type(kneset_data: BzbPerKalfiResult):
+def stats_grpd_by_yeshuv_type(kneset_data: ResultKnesset):
     vote_percent_per_yeshuv_type_series_list = []
-    from main import KNESSETS_LIST
+    from constants import KNESSETS_LIST
     gather_data_by_yeshuve_type(kneset_data, KNESSETS_LIST,
                                 vote_percent_per_yeshuv_type_series_list)
     # turn list into pandas series:

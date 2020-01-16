@@ -228,3 +228,124 @@ Questions:
         
         
         
+        
+        FINDINGS:
+        BIG:
+        NON JEW:
+        yeshuv types all of the big non jew ones
+        the avg bzb jumped on between 20 to 21,22 elections
+        drastic reduction in vote % in the same arab yeshuv types
+        between 20 and 21.
+                   
+        avg bzb lowered between 21 to 22  and we saw increasing vote %
+        might be negative corrleation between avg bzb and vote %
+        
+        
+        BIG:
+        JEW:
+        jews big yeshuvs:
+        very slight change to avg bzb between 18 to 19 but high increase in vote%
+        
+        we saw dramatic increase in vote% between election 19 to 20
+        with very slight increasing to avg bzb = 
+        so not even weak negative corrleation
+        
+        BUT
+        we saw bigger increase in avg bzb between knesset 19 to 20
+        and lower vote % all around big jews yeshuvs
+            
+        voting percent stay almost the same between 21 to 22 for jews
+        
+        
+        
+        HUGE cities:
+        very steep increase in avg bzb - Jerusalem between 19 to 20
+        leading to a steep decline in vote %
+        
+       general steady increase in avg bzb and decline in vote % is noted all around
+       
+       
+       OTHERS
+       Both in total data and kalfis above 250 ppl
+       baduin and arab settelements have much higher avg bzb
+       
+       besides them  we can see a steep and steady increase over the years
+       of avg bzb per kalfi in all small shapes of settlements,
+       
+       while in most settelemnets types its non an issue, since genereally the 
+       avg bzb still very low compared to the bigger cities
+       
+       the avg bzb per kalfi in baduin and non jew villagers is much higher,
+       combining this fact with the low vote %, high error rate in this settlements
+       we might want to re think the number of kalfis in this yeshuvs
+       
+       
+       
+       as talked about in the media during the last elections there high steep in vote%
+       in non jews yeshuvs,
+       
+       until now the high avg bzb per kalfis in this yeshuvs might not been an issue due to the low vote %
+       but if the population with participate more and more the high bzb in the kalfi
+       might turn to be a problem
+       
+       
+       
+        boxplot:
+        
+        120:667
+        130:2598
+        140:1439
+        HUGE
+        high numbers of ouitlers below min whisker in jeruslaem
+        around 44-50 kalfis with very low voting percent %
+        might be because of the non jew population
+        the numbers of min outilers decarses: 49 -> 44 -> 40
+        last 3 elections, fitting the increase in arab voting
+        so in cae the outilers kalfis are for arabs pop it might make sense
+        NO DATA ABOUT THE KALFIS IN ORDER TO  CHECK THAT OUT!??
+        its possible to check, look at those kalfi vote percent
+        and the kalfis with low look at arab parties voting
+        
+        
+        BIG JEW
+        Dramatic one time increase in kalfis with very low voting 
+        in 50-100 during kneset 21, went down back again in 22.
+        
+        
+        12 kalfis in 5-10 in kneseet 22 not good!
+        out of 225
+        the count:
+        50-100:1366
+        20-50:1518
+        10-20:227
+        5-10:255
+        2-5:139
+        
+        
+       BIG NON JEW
+       high number of kalfis positive outiler 50-100 which is very few cities
+       total of 189 kalfis and 15 kalfis in 21 elections were really positive!
+       went back down in kneseet 22 but which kalfis where they?
+       
+       a lot of positive outliers in kneseet 21, suspicous ?
+       23 kalfis out of the 359 kalfis in 10-20 arab
+       5 kalfis out of 380 in kalfis 20-50
+       
+       
+       
+       50-100 arab:189
+        20-50 arab:380
+        10-20 arab:359
+        5-10 arab:170
+        2-5 arab :69
+        
+        
+        other
+        kalfi num
+        319:450
+        20-50 arab:45
+        10-20 arab:305
+        5-10 arab:71
+        2-5 arab :107
+        2-5 arab :35
+        2-5 arab :47

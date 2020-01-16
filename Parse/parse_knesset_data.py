@@ -1,13 +1,12 @@
-from IO.data_classes import BzbPerKalfiResult, \
-    BzbPerKalfiResult_AboveBZBRange
-from IO.edit_yeshuvim_data import add_yeshuv_type_kneset
+from Parse.data_classes import ResultKnesset, \
+    ThresholdsResultKnesset
+from Parse.edit_yeshuvim_data import add_yeshuv_type_kneset
 from IO.read_files_helper import KnesetData
 from Questions.GeneralPopStats.population_statistics import stats_population_kneset_df
-from Questions.query_helper import filter_df_by_query, GLOBAL_ABOVE_X_PPK_VAR, \
-    Query
+from Questions.query_helper import filter_df_by_query
 import pandas as pd
 
-from main import KNESSETS_LIST
+
 
 
 def clean_matafot_hitzoniot(kneset_to_clean):
@@ -50,7 +49,8 @@ def _filter_kneset_data_by_query_list(kneset, query_list, threshold ):
     
 
 
-def bzb_per_kalfi_per_kneset(kneset_data, query_list, bzb_per_kalfi_result : BzbPerKalfiResult, threshold=0) -> None:
+def bzb_per_kalfi_per_kneset(kneset_data, query_list, bzb_per_kalfi_result : ResultKnesset, threshold=0) -> None:
+    from constants import KNESSETS_LIST
     kneset_list = KNESSETS_LIST
     for kneset_num in kneset_list:
 
@@ -66,40 +66,46 @@ def bzb_per_kalfi_per_kneset(kneset_data, query_list, bzb_per_kalfi_result : Bzb
 
 
 def bzb_per_kalfi_per_kneset_threshold(kneset_data, query_list,
-                                       bzb_per_kalfi_result : BzbPerKalfiResult_AboveBZBRange):
-    for threshold in GLOBAL_ABOVE_X_PPK_VAR:
-        bzb_per_kalfi_result_per_threshold = BzbPerKalfiResult()
+                                       bzb_per_kalfi_result : ThresholdsResultKnesset):
+    from constants import THRESHOLD_LIST
+    for threshold in THRESHOLD_LIST:
+        bzb_per_kalfi_result_per_threshold = ResultKnesset()
         bzb_per_kalfi_per_kneset(kneset_data,query_list,bzb_per_kalfi_result_per_threshold,threshold)
         bzb_per_kalfi_result.add_threshold_kneset_data(bzb_per_kalfi_result_per_threshold, threshold)
 
 
-def calc_bzb_per_kalfi_threshold(kneset_data : KnesetData, query_list_of_lists) -> BzbPerKalfiResult_AboveBZBRange:
+def calc_bzb_per_kalfi_threshold(kneset_data : KnesetData, query_list_of_lists) -> ThresholdsResultKnesset:
     bzb_per_kalfi_result  = None    
     for query_list in query_list_of_lists:
-            bzb_per_kalfi_result = BzbPerKalfiResult_AboveBZBRange()
+            bzb_per_kalfi_result = ThresholdsResultKnesset()
             bzb_per_kalfi_per_kneset_threshold(kneset_data, query_list,
                                      bzb_per_kalfi_result)
     return bzb_per_kalfi_result
 
 
-def calc_bzb_per_kalfi(kneset_data : KnesetData, query_list_of_lists) -> BzbPerKalfiResult:
+def calc_bzb_per_kalfi(kneset_data : KnesetData, query_list_of_lists) -> ResultKnesset:
     bzb_per_kalfi_result  = None
     for query_list in query_list_of_lists:
-        bzb_per_kalfi_result = BzbPerKalfiResult()
+        bzb_per_kalfi_result = ResultKnesset()
         bzb_per_kalfi_per_kneset(kneset_data,query_list, bzb_per_kalfi_result)
     return bzb_per_kalfi_result
 
 
-def set_run() -> BzbPerKalfiResult_AboveBZBRange:
+
+
+
+
+
+def set_run(query_list) -> ResultKnesset:
         kneset_data = KnesetData()
-        kneset_data.load_kneset_data()
+        kneset_data.load_clean_kneset_data()
 
         query_list_of_lists =[]
 
-        query_list1=[Query.Kalfi_Above_X]
-        query_list1 = [Query.Kalfi_Above_X]
-        query_list_of_lists.append(query_list1)
 
-        # bzb_per_kalfi_result = calc_bzb_per_kalfi(kneset_data, query_list_of_lists)
-        bzb_per_kalfi_result = calc_bzb_per_kalfi_threshold(kneset_data, query_list_of_lists )
+
+        query_list_of_lists.append(query_list)
+
+        bzb_per_kalfi_result = calc_bzb_per_kalfi(kneset_data, query_list_of_lists)
+        # bzb_per_kalfi_result = calc_bzb_per_kalfi_threshold(kneset_data, query_list_of_lists )
         return bzb_per_kalfi_result

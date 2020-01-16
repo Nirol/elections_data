@@ -23,13 +23,12 @@ class KnesetVars(Enum):
 
 class KnesetData:
     def __init__(self):
-        # initializing instance variable
         self.kneset_18 = None
         self.kneset_19 = None
         self.kneset_20 = None
         self.kneset_21 = None
         self.kneset_22 = None
-        self.kneset_list = None
+
 
 
     def update_kneset_data(self, kneset_18, kneset_19, kneset_20, kneset_21, kneset_22):
@@ -53,22 +52,19 @@ class KnesetData:
             return self.kneset_22
         return None
 
-    def get_kneset_list(self):
-        return self.kneset_list
+    def save_clean_knesset_df(self):
+        self.kneset_18.to_csv( r'Data\Kneset\clean_input\kneset_18.csv')
+        self.kneset_19.to_csv(r'Data\Kneset\clean_input\kneset_19.csv')
+        self.kneset_20.to_csv(r'Data\Kneset\clean_input\kneset_20.csv')
+        self.kneset_21.to_csv(r'Data\Kneset\clean_input\kneset_21.csv')
+        self.kneset_22.to_csv(r'Data\Kneset\clean_input\kneset_22.csv')
 
-    def save_dataframe_kneset(self):
-        self.kneset_18.to_csv( r'Data\Kneset\kneset_18.csv')
-        self.kneset_19.to_csv(r'Data\Kneset\kneset_19.csv')
-        self.kneset_20.to_csv(r'Data\Kneset\kneset_20.csv')
-        self.kneset_21.to_csv(r'Data\Kneset\kneset_21.csv')
-        self.kneset_22.to_csv(r'Data\Kneset\kneset_22.csv')
-
-    def load_kneset_data(self):
-        self.kneset_18 =  pd.read_csv("Data/Kneset/kneset_18.csv")
-        self.kneset_19 =  pd.read_csv("Data/Kneset/kneset_19.csv")
-        self.kneset_20 =  pd.read_csv("Data/Kneset/kneset_20.csv")
-        self.kneset_21 =  pd.read_csv("Data/Kneset/kneset_21.csv")
-        self.kneset_22 =  pd.read_csv("Data/Kneset/kneset_22.csv")
+    def load_clean_kneset_data(self):
+        self.kneset_18 =  pd.read_csv("Data/Kneset/clean_input/kneset_18.csv")
+        self.kneset_19 =  pd.read_csv("Data/Kneset/clean_input/kneset_19.csv")
+        self.kneset_20 =  pd.read_csv("Data/Kneset/clean_input/kneset_20.csv")
+        self.kneset_21 =  pd.read_csv("Data/Kneset/clean_input/kneset_21.csv")
+        self.kneset_22 =  pd.read_csv("Data/Kneset/clean_input/kneset_22.csv")
 
 
 class MetaData:
@@ -94,23 +90,7 @@ class MetaData:
     def get_parties_dict(self):
         return self.parties_dict
 
-    def add_voters_percent_per_knesent(self):
-        self.yeshuvim['18_vote_percent'] = self.yeshuvim['18_Voters'] / self.yeshuvim['18_BZB']
-        self.yeshuvim['19_vote_percent'] = self.yeshuvim['19_Voters'] /  self.yeshuvim['19_BZB']
-        self.yeshuvim['20_vote_percent'] = self.yeshuvim['20_Voters'] /  self.yeshuvim['20_BZB']
-        self.yeshuvim['21_vote_percent'] = self.yeshuvim['21_Voters'] / self.yeshuvim['21_BZB']
-        self.yeshuvim['22_vote_percent'] = self.yeshuvim['22_Voters'] / self.yeshuvim['22_BZB']
 
-    def add_PPK(self):
-        self.yeshuvim['18_PPK'] = self.yeshuvim['18_BZB'] / self.yeshuvim['18_Kalfi_Num']
-        self.yeshuvim['19_PPK'] = self.yeshuvim['19_BZB'] / self.yeshuvim[
-            '19_Kalfi_Num']
-        self.yeshuvim['20_PPK'] = self.yeshuvim['20_BZB'] / self.yeshuvim[
-            '20_Kalfi_Num']
-        self.yeshuvim['21_PPK'] = self.yeshuvim['21_BZB'] / self.yeshuvim[
-            '21_Kalfi_Num']
-        self.yeshuvim['22_PPK'] = self.yeshuvim['22_BZB'] / self.yeshuvim[
-            '22_Kalfi_Num']
 
 
     def save_dataframe_yesuhvim(self):
