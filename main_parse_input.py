@@ -1,6 +1,6 @@
 from IO.read_files_helper import KnesetData, MetaData, read_data
-from Parse.edit_yeshuvim_data import update_yeshuvim_occurences, \
-    add_voters_percent_per_knesent, add_PPK
+from Parse.edit_yeshuvim_data import update_yeshuvim_occurrences, \
+    add_voters_percent_per_knesset, add_ppk
 import pandas as pd
 
 from constants import KNESSETS_LIST, KNESET_DF_NUM_META_COLS
@@ -40,8 +40,12 @@ if __name__ == "__main__":
 
     yeshuvim_df = meta_data.get_yeshuvim_data()
 
-    update_yeshuvim_occurences(kneset_data, yeshuvim_df)
-    add_voters_percent_per_knesent(yeshuvim_df)
-    add_PPK(yeshuvim_df)
-    meta_data.save_dataframe_yesuhvim()
+    update_yeshuvim_occurrences(kneset_data, yeshuvim_df)
+
+    #TODO method change test/debug before another use
+    add_voters_percent_per_knesset(yeshuvim_df)
+    # TODO method change test/debug before another use
+    add_ppk(yeshuvim_df)
+
+    meta_data.save_df_yeshuvim()
 

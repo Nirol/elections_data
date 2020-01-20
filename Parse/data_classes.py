@@ -1,5 +1,4 @@
 from enum import Enum
-
 import pandas as pd
 
 
@@ -12,18 +11,25 @@ class PopVars(Enum):
     VotePercent = 6
 
 
+
 class PopulationStats(object):
+    def __init__(self, pearson, tau, vote_percent_std):
+        self.pearson = pearson
+        self.tau = tau
+        self.vote_percent_std = vote_percent_std
+
+
+class PopulationInfo(object):
     def __init__(self, num_kalfis_total, num_unique_yeshuvim, total_bzb,
-                 total_voters, pearson, tau, vote_percent_std):
+                 total_voters, pop_stats):
         self.Num_Kalfi = num_kalfis_total
         self.Unq_Yeshuv = num_unique_yeshuvim
         self.Bzb = total_bzb
         self.Voters = total_voters
         self.VotePercent = total_voters / total_bzb
         self.AvgBzb = total_bzb / num_kalfis_total
-        self.pearson = pearson
-        self.tau = tau
-        self.vote_percent_std = vote_percent_std
+        self.pop_stats = pop_stats
+
 
     def get_var(self, pop_var_enum: PopVars):
         object_dict = self.__dict__
@@ -40,29 +46,29 @@ class PopulationStats(object):
 
 class ResultKnesset():
     def __init__(self):
-        self.knesets_dict = {}
+        self.knessets_dict = {}
 
     def add_kneset(self, kneset_num: str, kneset: pd.DataFrame,
-                   kneset_stats: PopulationStats) -> None:
+                   kneset_stats: PopulationInfo) -> None:
         tmp_kneset_dict = {"num": kneset_num,
                            'data': kneset,
                            'stats': kneset_stats
                            }
-        self.knesets_dict[kneset_num] = tmp_kneset_dict
+        self.knessets_dict[kneset_num] = tmp_kneset_dict
 
     def get_kneset_data(self, kneset_num: int) -> pd.DataFrame:
-        return self.knesets_dict[kneset_num]['data']
+        return self.knessets_dict[kneset_num]['data']
 
-    def get_kneset_stats(self, kneset_num: int) -> PopulationStats:
-        return self.knesets_dict[kneset_num]['stats']
+    def get_kneset_stats(self, kneset_num: int) -> PopulationInfo:
+        return self.knessets_dict[kneset_num]['stats']
 
     def get_single_kneset_dict(self, kneset_num: str):
-        return self.knesets_dict[kneset_num]
+        return self.knessets_dict[kneset_num]
 
     def get_var_per_kneset(self, pop_var: PopVars):
         ans = []
-        for k in self.knesets_dict.keys():
-            pop_stats = self.knesets_dict[k]['stats']
+        for k in self.knessets_dict.keys():
+            pop_stats = self.knessets_dict[k]['stats']
             ans.append(pop_stats.get_var(pop_var))
         return ans
 
