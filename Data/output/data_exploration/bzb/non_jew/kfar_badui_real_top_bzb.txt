@@ -1,0 +1,11 @@
+Yeshuv	Kalfi_Num	Total Kalfi	BZB	vote_percent
+Mas'udin al 'Azazma	2	12	706	55.09915014
+Abu Rukayyek	4	7	756	43.25396825
+Abu Rukayyek	7	7	747	34.27041499
+A'sam	7	7	740	39.32432432
+Abu Juway'ad	2	3	751	29.82689747
+Abu Kuraynat	1	4	744	44.48924731
+Abu Kuraynat	2	4	746	42.22520107
+Abu Kuraynat	3	4	753	39.17662683
+Abu Kuraynat	4	4	736	38.17934783
+Kabbu'a	1	1	739	55.2097429
