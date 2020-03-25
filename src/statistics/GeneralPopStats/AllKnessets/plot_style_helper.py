@@ -1,110 +1,9 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 
-from Questions.GeneralPopStats.AllKnessets.all_knesets_stats_by_yeshuv_type import \
-    PlotType, YeshuvType, _BIG_YESHUV_INDEX, _SMALL_YESHUV_INDEX, \
-    _reverse_list_of_strings, _HUGE_YESHUV_INDEX
-
-
-
-def _multi_plt_graph(bzb):
-    bzb_22 = bzb['22']
-    sum_bzb = bzb_22.sum()
-    a = bzb_22.divide(sum_bzb, fill_value=0)
-    b = a.multiply(
-        100)
-    from Parse.parse_stats import validate_all_yeshuvs_in_sries
-    validate_all_yeshuvs_in_sries(b)
-    values = [b["120"], b["130"], b["140"], b["150"], b["160"], b['170'],
-              b['180'], b['190']]
-
-    bigger_100 = b["120"] + b["130"] + b["140"]
-    bigger_100_list = [b["120"], b["130"], b["140"]]
-
-    between_10_100_jew = b["150"] + b["160"] + b['170']
-    between_10_100_jew_list = [b["150"], b["160"], b['170']]
-    #340
-    smaller_yeshuv_jews = b['310'] + b['320'] + b['192'] + b['191'] + b[
-        '180'] + b['190'] + b['340'] + b['370'] + b['370'] + b['330'] + b[
-                              '193']
-    smaller_yeshuv_jews_list = [b['310'] + b['320'] + b['192'] + b['191'],
-                                b['180'] + b['190'] + b['340'] + b['370'] + b[
-                                    '370'], b['330'] + b['193']]
-
-    non_jew_yeshuvs = b["250"] + b["260"] + b['270'] + b['280'] + b['290'] + b[
-        '450'] + b['460']
-    non_jew_yeshuvs_list = [b["250"], b["260"], b['270'] + b['280'],
-                            b['290'] + b['450'], b['460']]
-
-    group_names = ['Cities > 100K', 'Jews 10K-100K', 'Jews < 10K', 'Non Jews']
-    group_size = [bigger_100, between_10_100_jew, smaller_yeshuv_jews,
-                  non_jew_yeshuvs]
-
-    subgroup_names = ['Jerusalem', '200K-500K', '100K-200K', '50K-100K',
-                      '20K-50K', '10K-20K', 'Moshav', 'Yeshuv', 'Kibbutz',
-                      '50K-100K', '20K-50K', '5K-20K', '<5k', 'Bedouin']
-
-    subgroup_size = [b["120"], b["130"], b["140"], b["150"], b["160"],
-                     b['170'], b['310'] + b['320'] + b['192'] + b['191'],
-                     b['180'] + b['190'] + b['340'] + b['370'] + b['370'],
-                     b['330'] + b['193'], b["250"], b["260"],
-                     b['270'] + b['280'],
-                     b['290'] + b['450'], b['460']]
-    a, b, c, d = [plt.cm.Blues, plt.cm.Reds, plt.cm.Greens, plt.cm.Oranges]
-
-    # First Ring (outside)
-    fig, ax = plt.subplots()
-    fig.suptitle("BZB Breakdown by Yeshuv Size & Type")
-    ax.axis('equal')
-    mypie, _,percent_out = ax.pie(group_size, radius=1, autopct='%1.1f%%', pctdistance=0.85,
-                      labels=group_names,labeldistance=1.08,
-                      colors=[a(0.6), b(0.6), c(0.6), d(0.6)])
-    plt.setp(mypie, width=0.3, edgecolor='white')
-
-    # Second Ring (Inside)
-    mypie2, _ = ax.pie(subgroup_size, radius=1 - 0.3,labels =subgroup_names,labeldistance=0,
-                       colors=[a(0.5), a(0.4),
-                               a(0.3), b(0.5), b(0.4), b(0.3), c(0.5), c(0.4),
-                               c(0.3),
-                               d(0.5), d(0.4), d(0.3), d(0.2), d(0.1)])
-
-    plt.setp(mypie2, width=0.25, edgecolor='white')
-    plt.margins(0, 0)
-
-
-    handles, labels = ax.get_legend_handles_labels()
-    subgroup_names_legs = ['Jerusalem', '200K-500K', '100K-200K', '50K-100K',
-                           '20K-50K', '10K-20K', 'Moshav', 'Yeshuv', 'Kibbutz',
-                           '50K-100K', '20K-50K', '5K-20K', '<5k', 'Bedouin']
-    ax.legend(handles[4:], subgroup_names_legs, loc='best')
-
-    plt.show()
-    print("kek")
-
-    # aArray = np.array(bigger_100_list)
-    # bArray = np.array(between_5_50_jew_list)
-    # cArray = np.array(smaller_yeshuv_jews_list)
-    # dArray = np.array(non_jew_yeshuvs_list)
-    #
-    # xArray = np.array(aArray, bArray, )
-    #
-    #
-    # vals = xArray
-    # fig, ax = plt.subplots()
-    # size = 0.3
-    #   #
-    # cmap = plt.get_cmap("tab20c")
-    # outer_colors = cmap(np.arange(3) * 4)
-    # inner_colors = cmap(np.array([1, 2, 5, 6, 9, 10]))
-    #
-    # ax.pie(vals.sum(axis=1), radius=1, colors=outer_colors,
-    #        wedgeprops=dict(width=size, edgecolor='w'))
-    #
-    # ax.pie(vals.flatten(), radius=1 - size, colors=inner_colors,
-    #        wedgeprops=dict(width=size, edgecolor='w'))
-    #
-    # ax.set(aspect="equal", title='Pie plot with `ax.pie`')
-    # plt.show()
+from plot_helper import YeshuvType, PlotType
+from constants import BIG_YESHUV_INDEX, SMALL_YESHUV_INDEX, HUGE_YESHUV_INDEX
+from src.statistics.GeneralPopStats.AllKnessets.all_knesets_stats_by_yeshuv_type import \
+    reverse_list_of_strings
 
 
 def _set_bar_graph_titles(fig, axs, pt: PlotType, yt: YeshuvType):
@@ -153,7 +52,7 @@ def _set_bar_graph_titles(fig, axs, pt: PlotType, yt: YeshuvType):
 
 def create_df_from_series_per_knesset(series, yt: YeshuvType):
     if yt == YeshuvType.Big:
-        index_list = _BIG_YESHUV_INDEX
+        index_list = BIG_YESHUV_INDEX
         bars_jews = [series["150"], series["160"], series['170'],
                      series['180'], series['190']]
         bars_non_jews = [series["250"], series["260"], series['270'],
@@ -165,18 +64,19 @@ def create_df_from_series_per_knesset(series, yt: YeshuvType):
     elif yt == YeshuvType.Others:
         bars = [series["310"], series["320"], series['330'], series['350'],
                 series['370'], series['450'], series['460']]
-        index_list_rev = _SMALL_YESHUV_INDEX
-        index_list = _reverse_list_of_strings(index_list_rev)
+
+        index_list_rev = SMALL_YESHUV_INDEX
+        index_list = reverse_list_of_strings(index_list_rev)
         df = pd.DataFrame({'data': bars}, index=index_list)
         return df
     elif yt == YeshuvType.Huge:
         bars = [series["120"], series["130"], series['140']]
-        index_list = _HUGE_YESHUV_INDEX
+        index_list = HUGE_YESHUV_INDEX
         df = pd.DataFrame({'data': bars}, index=index_list)
         return df
 
 
-def find_offsets(pt, yt):
+def __find_offsets(pt, yt):
     x_bar_offset = 0
     x_bar_non_jew_offset = 0
     y_bar_offset = 0
@@ -256,7 +156,7 @@ def _set_graph_design(ax, knesset_num, pt: PlotType, yt: YeshuvType):
 
 
 def _add_column_text_labels(ax, df, pt: PlotType, yt: YeshuvType):
-    x_bar_offset, x_bar_non_jew_offset, y_bar_offset = find_offsets(pt, yt)
+    x_bar_offset, x_bar_non_jew_offset, y_bar_offset = __find_offsets(pt, yt)
     if yt == YeshuvType.Big:
 
         x_index_location_on_figure = {'50-100': -0.319,

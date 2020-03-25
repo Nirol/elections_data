@@ -2,23 +2,32 @@ import csv
 from enum import Enum
 import pandas as pd
 
-_YESHUVIM_CODE_LIST_FILE_PATH = "Data/yeshuv/yeshuvs_list_elections.csv"
-_PARTIES_CODE_LIST_FILE_PATH = "Data/parties_codes.csv"
-_YESHUVIM_METADATA_TYPE = "Data/yeshuv/yeshuv_metadata_type.csv"
+PROJECT_FOLDER = "C:\\Users\\owner\\PycharmProjects\\Elections\\"
+_YESHUVIM_CODE_LIST_FILE_PATH = PROJECT_FOLDER + "Data\\yeshuv\\yeshuvs_list_elections.csv"
+_PARTIES_CODE_LIST_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\parties_codes\\parties_codes.csv"
+_YESHUVIM_METADATA_TYPE = PROJECT_FOLDER + "Data\\yeshuv\\yeshuv_metadata_type.csv"
+_YESHUVIM_METADATA_TYPE_2 = PROJECT_FOLDER + "Data\\yeshuv\\yeshuv_metadata_new.csv"
+_KALFI_ADDRESS_FILE = PROJECT_FOLDER + "Data\\clean\\kalfi_address_utf8.csv"
 
-_KNESET_18_FILE_PATH = "Data/18.csv"
-_KNESET_19_FILE_PATH = "Data/19.csv"
-_KNESET_20_FILE_PATH = "Data/20.csv"
-_KNESET_21_FILE_PATH = "Data/21.csv"
-_KNESET_22_FILE_PATH = "Data/22.csv"
+KNESSET_CLEAN_OUTPUT_FOLDER = PROJECT_FOLDER + "Data\\clean\\knesset\\"
+
+_KNESET_18_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\knesset\\18.csv"
+_KNESET_19_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\knesset\\19.csv"
+_KNESET_20_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\knesset\\20.csv"
+_KNESET_21_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\knesset\\21.csv"
+_KNESET_22_FILE_PATH = PROJECT_FOLDER + "Data\\raw\\knesset\\22.csv"
 
 
 class KnesetVars(Enum):
+    Kalfi_Num = "Kalfi_Num"
     BZB = "BZB"
     Voters = "Voters"
     Kosher_Voters = "Kosher_Voters"
     Error_Voters = "Error_Voters"
-    Kalfi_Num = "Kalfi_Num"
+    Yeshuv_Type = "Yeshuv_Type"
+    Vote_Percent = "Vote_Percent"
+    Error_Vote_Percent = "Error_Vote_Percent"
+
 
 
 class KnesetData:
@@ -28,6 +37,8 @@ class KnesetData:
         self.kneset_20 = None
         self.kneset_21 = None
         self.kneset_22 = None
+        self.address = None
+        self.yeshuvv = None
 
     def update_kneset_data(self, kneset_18, kneset_19, kneset_20, kneset_21,
                            kneset_22):
@@ -50,19 +61,21 @@ class KnesetData:
             return self.kneset_22
         return None
 
-    def save_clean_knesset_df(self):
-        self.kneset_18.to_csv(r'Data\Kneset\clean_input\kneset_18.csv')
-        self.kneset_19.to_csv(r'Data\Kneset\clean_input\kneset_19.csv')
-        self.kneset_20.to_csv(r'Data\Kneset\clean_input\kneset_20.csv')
-        self.kneset_21.to_csv(r'Data\Kneset\clean_input\kneset_21.csv')
-        self.kneset_22.to_csv(r'Data\Kneset\clean_input\kneset_22.csv')
+
 
     def load_clean_kneset_data(self):
-        self.kneset_18 = pd.read_csv("Data/Kneset/clean_input/kneset_18.csv")
-        self.kneset_19 = pd.read_csv("Data/Kneset/clean_input/kneset_19.csv")
-        self.kneset_20 = pd.read_csv("Data/Kneset/clean_input/kneset_20.csv")
-        self.kneset_21 = pd.read_csv("Data/Kneset/clean_input/kneset_21.csv")
-        self.kneset_22 = pd.read_csv("Data/Kneset/clean_input/kneset_22.csv")
+
+        self.kneset_18 = pd.read_csv(KNESSET_CLEAN_OUTPUT_FOLDER+"_18.csv")
+        self.kneset_19 = pd.read_csv(KNESSET_CLEAN_OUTPUT_FOLDER + "_19.csv")
+        self.kneset_20 = pd.read_csv(KNESSET_CLEAN_OUTPUT_FOLDER + "_20.csv")
+        self.kneset_21 = pd.read_csv(KNESSET_CLEAN_OUTPUT_FOLDER + "_21.csv")
+        self.kneset_22 = pd.read_csv(KNESSET_CLEAN_OUTPUT_FOLDER + "_22.csv")
+
+
+        self.address = pd.read_csv("Data/clean/kalfi_address_utf8.csv")
+        self.yeshuvv = pd.read_csv(_YESHUVIM_METADATA_TYPE_2, encoding = 'ISO-8859-1' )
+
+
 
 
 class MetaData:
@@ -103,7 +116,6 @@ def read_data(kneset_data, meta_data):
 
 def _open_files():
     try:
-
         yeshuvim_code_list = open(_YESHUVIM_CODE_LIST_FILE_PATH, "r")
         parties_code_list = open(_PARTIES_CODE_LIST_FILE_PATH, "r")
         elec_18_csv = open(_KNESET_18_FILE_PATH, "r")
@@ -115,12 +127,12 @@ def _open_files():
         return [yeshuvim_code_list, parties_code_list, elec_18_csv,
                 elec_19_csv, elec_20_csv, elec_21_csv, elec_22_csv]
     except IOError:
-        print
-        "Error: File does not appear to exist."
+        print("asd")
+
 
 
 def _create_kneset_data_dfs(opend_files_list, kneset_data):
-    elec_18_df = pd.read_csv(opend_files_list[2], delimiter=',')
+    elec_18_df = pd.read_csv(opend_files_list[2], delimiter=',', float_precision='round_trip')
     elec_18_df[elec_18_df.columns] = elec_18_df[elec_18_df.columns].astype(int)
 
     elec_19_df = pd.read_csv(opend_files_list[3], delimiter=',')

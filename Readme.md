@@ -1,3 +1,203 @@
+Data prep:
+Elections result per Kalfi are published by 
+ועדת הבחירות המרכזית לכנסת
+for knessets numbered 18-22.
+created a dictonary of all the different parties ( throught the years
+in the last  elections.) symbols to number codes.
+
+
+yeshuv type for all yeshuvs were found on a different excel table online:?
+
+
+Kalfis locations were found on a seperate file online:
+https://bechirot22.bechirot.gov.il/election/Kneset20/Pages/BallotsList.aspx
+
+
+
+headline replaced to english from hebrew
+
+replaced parties code in kneset elections published results with the code.
+removed maatafot hitzoniot 875, 999, 9999
+
+
+
+Data exploration:
+vote percent:
+histogram and box plot for general view,
+over 100 vote percent 2 outliers:
+SN 1198 3719
+a lot of low voting percent outliers to look at:
+n50smallest:
+
+22 out of the 50 lowest vote percent kalfis are located
+in Jerusalem so will look on the smallest kalfi seperatly, jerusalem and non jerusalem
+
+In Jerusalem:
+
+
+
+Outside Jerusalem:
+mostly arab, badioum yeshivim with low vote %
+3 kalfis in Tel Aviv
+6 kalfis in Elat
+
+
+
+BZB:
+small:
+most kalfis are in small jewish yeshuvs with a single kalfi
+this yeshuvs/kalfis tend to have higher than the avg voting percent and very low error percent
+most of the others are small non jewish yeshuvs
+as par with the rest of the non jewish ( mostly arab) population, have low vote percent
+
+
+
+
+ibbim is outstaning with very low vote percent
+same with kfar silver
+shar menahse , aluni yitzhak ayanot
+
+
+there is a single kalfi with low bzb in a big city:
+tiberaius bit sefer daliut.
+
+
+BZB
+
+there are total of only 36 different unique yeshuvs on the top 50 largest bzb kalfis.
+6 of the highest bzb top 50 are in tel aviv
+3 in Jerusalem
+
+other than that 19 out of the 50 kalfis are in non jewish yeshuvs
+somehow this yeshuvs has two very busy high bzb kalfis while other more
+populated cities has either 1 (haifa , beersheva, ranna risho) or none
+
+
+Arrabe
+El'ad
+Elat
+I'billin
+Nazareth
+Ramat Gan
+Sederot
+Tel Sheva
+
+
+exploring the list of biggest kalfis even further for the top 200 kalfis:
+97 unique yeshuvs on that list
+76 kalfis are in non jewish yeshuvs in 35 unique non jewish yeshuv.
+List of 41 yeshuvs with more than 1 kalfi on top 200 highest bzb list:
+|                           | Yeshuv |
+|---------------------------|--------|
+| Tel Aviv \- Yafo          | 17     |
+| Jerusalem                 | 13     |
+| Rahat                     | 7      |
+| Ashqelon                  | 6      |
+| Nazareth                  | 6      |
+| Arrabe                    | 5      |
+| Mughar                    | 4      |
+| Tamra                     | 4      |
+| Haifa                     | 4      |
+| Afula                     | 4      |
+| I'billin                  | 4      |
+| Rishon LeZiyyon           | 3      |
+| Kuseife                   | 3      |
+| Shefar'am                 | 3      |
+| Ramat Gan                 | 3      |
+| Julis                     | 3      |
+| Sederot                   | 3      |
+| Modi'in\-Makkabbim\-Re'ut | 3      |
+| Netanya                   | 3      |
+| Tuba\-Zangariyye          | 3      |
+| Hod HaSharon              | 3      |
+| Kafar Yasif               | 2      |
+| Nahariyya                 | 2      |
+| Elat                      | 2      |
+| Hadera                    | 2      |
+| Ein Mahel                 | 2      |
+| Giv'at Shemu'el           | 2      |
+| Kafar Qara                | 2      |
+| Ma'ale Adummim            | 2      |
+| Beit Jann                 | 2      |
+| Rehovot                   | 2      |
+| Ra'annana                 | 2      |
+| Binyamina\-Giv'at Ada     | 2      |
+| Yanuh\-Jat                | 2      |
+| Be'er Sheva               | 2      |
+| Kafar Bara                | 2      |
+| Tel Sheva                 | 2      |
+| Umm al\-Fahm              | 2      |
+| Peqi'in \(Buqei'a\)       | 2      |
+| El'ad                     | 2      |
+| Ashdod                    | 2      |
+
+
+
+   
+   
+   what about top 1k biggest bzb kalfis?
+   
+   196 unique yeshuvs
+   
+   
+   | lol123|
+   |---------------------------------|
+   | Tel Aviv \- Yafo            67  | 
+   | Jerusalem                  50   |
+   | Shefar'am                  26   |
+   | Tamra                      25   |
+   | Haifa                      24   |
+   | Ramat Gan                  24   |
+   | Rishon LeZiyyon            21   |
+   | Tire                       21   |
+   | Ashqelon                   20   |
+   | Netanya                    20   |
+   | Nazareth                   20   |
+   | Petah Tiqwa                18   |
+   | Hod HaSharon               17   |
+   | Ashdod                     15   |
+   | Bene Beraq                 15   |
+   | Modi'in\-Makkabbim\-Re'ut    14 |
+   | Rehovot                    13   |
+   | Rahat                      13   |
+   | Arrabe                     12   |
+   | Hadera                     12   |
+   | Kafar Qara                 12   |
+   | Nahariyya                  12   |
+   | Bet Shemesh                11   |
+   | Ar'ara                     11   |
+   | Kafar Kanna                10   |
+
+    
+    357 non jewish kalfis in top 1k biggest bzb
+    in 63 unique yeshuvs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Questions:
     a. Yeshuvim,
         1. when BZB increase but no kalfi num increase - did voters % gone down ?

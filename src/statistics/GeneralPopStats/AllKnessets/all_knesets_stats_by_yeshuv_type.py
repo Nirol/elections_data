@@ -1,40 +1,14 @@
-from enum import Enum
-from Parse.data_classes import ResultKnesset, ThresholdsResultKnesset
+from src.data.data_classes import ResultKnesset, ThresholdsResultKnesset
 import pandas as pd
 from matplotlib import pyplot as plt
 
+from plot_helper import HUGE_YESHUV_LIST, OTHER_YESHUV_LIST, \
+    BIG_NON_JEW_YESHUV_LIST, BIG_JEW_YESHUV_LIST, YeshuvType, PlotType
+from single_knesset.plot_single_knesset import single_knesset_all_yeshuv_types
+from single_knesset.bzb_pie import _multi_plt_graph
 
 
-
-
-_BIG_YESHUV_INDEX = ['50-100', '20-50', '10-20', '5-10', '2-5']
-_SMALL_YESHUV_INDEX = ['מושב', 'מושב שיתופי', 'קיבוץ', 'כפר יהודי',
-                       'ישוב קהילתי',
-                       'כפר לא יהודי', 'שבט בדווי']
-_HUGE_YESHUV_INDEX = ['500+ (םילשורי)', '200-500', '100-200']
-
-
-class YeshuvType(Enum):
-    Big = 1
-    Others = 2
-    Huge = 3
-
-
-class PlotType(Enum):
-    Vote_Percent = 1
-    Error = 2
-    AvgBzb = 3
-    Bzb = 4
-    Vote_Percent_Box_Plot = 5
-
-BIG_YESHUV_LIST = ["150", "160", '170', '180', '190', "250" ,"260" ,'270' ,'280','290']
-HUGE_YESHUV_LIST = ["120", "130", "140"]
-OTHER_YESHUV_LIST = ["310", "320", '330', '350', '370', '450', '460']
-
-BIG_NON_JEW_YESHUV_LIST = BIG_YESHUV_LIST[:5]
-BIG_JEW_YESHUV_LIST = BIG_YESHUV_LIST[5:]
-
-def get_yeshuv_list(yt :YeshuvType, is_jew : bool ):
+def get_yeshuv_list(yt : YeshuvType, is_jew : bool):
     if yt == YeshuvType.Others:
         return OTHER_YESHUV_LIST
     elif yt == YeshuvType.Huge:
@@ -47,10 +21,13 @@ def get_yeshuv_list(yt :YeshuvType, is_jew : bool ):
 
 
 
-def _reverse_list_of_strings(strings):
+def reverse_list_of_strings(strings):
     return [x[::-1] for x in strings]
 
-from Questions.GeneralPopStats.AllKnessets import plot_style_helper
+
+import plot_style_helper
+
+
 def _add_to_plot(fig, knesset_num, df: pd.DataFrame, axs, pt: PlotType,
                  yt: YeshuvType):
     i, j = plot_style_helper.get_plot_idx_by_knesset(knesset_num, yt)
@@ -70,8 +47,8 @@ def _add_to_plot(fig, knesset_num, df: pd.DataFrame, axs, pt: PlotType,
     plot_style_helper._add_column_text_labels(axs[i, j], df, pt, yt)
 
 
-def all_knessets_bar_graph(list_series: pd.Series, pt: PlotType,
-                            yt: YeshuvType):
+def _all_knessets_bar_graph(list_series: pd.Series, pt: PlotType,
+                           yt: YeshuvType):
     fig, axs = None, None
     if yt == YeshuvType.Big or yt == YeshuvType.Huge:
         fig, axs = plt.subplots(2, 3, figsize=(12, 8),
@@ -139,16 +116,18 @@ def gather_data_by_yeshuve_type_group_by(kneset_data : pd.DataFrame, pt : PlotTy
     return ser_plot
 
 
+
+
 def stats_grpd_by_yeshuv_type(kneset_data: ResultKnesset):
-    ser_vote = gather_data_by_yeshuve_type_group_by(kneset_data, PlotType.Vote_Percent)
+    # ser_vote = gather_data_by_yeshuve_type_group_by(kneset_data, PlotType.Vote_Percent)
 
     # _all_knessets_bar_graph(ser_vote, PlotType.Vote_Percent_Box_Plot,
     #                         YeshuvType.Huge)
-    all_knessets_bar_graph(ser_vote, PlotType.Vote_Percent_Box_Plot,
-                            YeshuvType.Big)
-
-    all_knessets_bar_graph(ser_vote, PlotType.Vote_Percent_Box_Plot,
-                            YeshuvType.Others)
+    # all_knessets_bar_graph(ser_vote, PlotType.Vote_Percent_Box_Plot,
+    #                        YeshuvType.Big)
+    #
+    # all_knessets_bar_graph(ser_vote, PlotType.Vote_Percent_Box_Plot,
+    #                        YeshuvType.Others)
 
     # _all_knessets_bar_graph(ser_error, PlotType.Error,
     #                         YeshuvType.Huge)
@@ -159,7 +138,10 @@ def stats_grpd_by_yeshuv_type(kneset_data: ResultKnesset):
     # _all_knessets_bar_graph(ser_error, PlotType.Error,
     #                         YeshuvType.Others)
     #
-    #
+
+    avg_bzb_groupd_by = gather_data_by_yeshuve_type_group_by(kneset_data, PlotType.AvgBzb)
+
+    single_knesset_all_yeshuv_types(avg_bzb_groupd_by["22"], PlotType.AvgBzb)
     # _all_knessets_bar_graph(avg_bzb_groupd_by, PlotType.AvgBzb,
     #                         YeshuvType.Huge)
     #
@@ -172,7 +154,10 @@ def stats_grpd_by_yeshuv_type(kneset_data: ResultKnesset):
     # _pie_graph(bzb, PlotType.Bzb,
     #                        YeshuvType.Big)
 
-    # _multi_plt_graph(bzb)
+    bzb = gather_data_by_yeshuve_type_group_by(kneset_data,
+                                                    PlotType.Bzb)
+    #plot pie bzb graph
+    _multi_plt_graph(bzb)
 
 
 def stats_grpd_by_yeshuv_type_by_threshold(results : ThresholdsResultKnesset):

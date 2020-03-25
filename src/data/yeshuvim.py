@@ -1,11 +1,10 @@
 from typing import Dict
-
-from IO.read_files_helper import KnesetVars, read_metadata_yeshuv_type_to_dict
+from read_files_helper import KnesetVars, read_metadata_yeshuv_type_to_dict
 import pandas as pd
 from constants import KNESSETS_LIST, get_yeshuvim_col_name
 
 
-def _calc_var_dict_from_kneset_df(var_sum_dict: Dict, kneset_df: pd.DataFrame,
+def __calc_var_dict_from_kneset_df(var_sum_dict: Dict, kneset_df: pd.DataFrame,
                                   sn_yeshuv: int) -> None:
     # all knesset vars are summed except number of kalfis.
     for knesset_enum_var in KnesetVars:
@@ -20,7 +19,7 @@ def _calc_var_dict_from_kneset_df(var_sum_dict: Dict, kneset_df: pd.DataFrame,
             var_sum_dict[knesset_enum_var] = next_var_sum_per_sn
 
 
-def _update_yeshuvim_df(var_sum_dict: Dict, yeshuvim_df: pd.DataFrame,
+def __update_yeshuvim_df(var_sum_dict: Dict, yeshuvim_df: pd.DataFrame,
                         sn_yeshuv: int, knesset_num: int) -> None:
     for knesset_enum_var in KnesetVars:
         col_name = get_yeshuvim_col_name(knesset_num, knesset_enum_var)
@@ -30,14 +29,14 @@ def _update_yeshuvim_df(var_sum_dict: Dict, yeshuvim_df: pd.DataFrame,
     # list of the different parameters is noted in the KnesetVars enum class
 
 
-def _update_yeshuvim_occurrence_per_kneset(yeshuvim_df: pd.DataFrame,
+def __update_yeshuvim_occurrence_per_kneset(yeshuvim_df: pd.DataFrame,
                                            knesset_df: pd.DataFrame,
                                            knesset_num: str,
                                            sn_yeshuv: int) -> None:
     knesset_parameters_data_dict = {}
-    _calc_var_dict_from_kneset_df(knesset_parameters_data_dict, knesset_df,
+    __calc_var_dict_from_kneset_df(knesset_parameters_data_dict, knesset_df,
                                   sn_yeshuv)
-    _update_yeshuvim_df(knesset_parameters_data_dict, yeshuvim_df, sn_yeshuv,
+    __update_yeshuvim_df(knesset_parameters_data_dict, yeshuvim_df, sn_yeshuv,
                         knesset_num)
 
 
@@ -47,11 +46,11 @@ def update_yeshuvim_occurrences(kneset_data: pd.DataFrame,
         kneset_df = kneset_data.get_kneset_df(kneset_num)
         list_unique_yeshuvim_sn = kneset_df['SN'].unique()
         for yeshuv_sn in list_unique_yeshuvim_sn:
-            _update_yeshuvim_occurrence_per_kneset(yeshuvim_df, kneset_df,
+            __update_yeshuvim_occurrence_per_kneset(yeshuvim_df, kneset_df,
                                                    kneset_num, yeshuv_sn)
 
 
-def find_in_dict(yeshuve_type_dict: Dict, sn_yeshuv: int) -> str:
+def __find_in_dict(yeshuve_type_dict: Dict, sn_yeshuv: int) -> str:
     key = str(int(sn_yeshuv))
     if key in yeshuve_type_dict:
         return yeshuve_type_dict[key]
@@ -61,13 +60,7 @@ def find_in_dict(yeshuve_type_dict: Dict, sn_yeshuv: int) -> str:
 def add_yeshuv_type(yeshuvim: pd.DataFrame) -> None:
     yeshuve_type_dict = read_metadata_yeshuv_type_to_dict()
     yeshuvim['Yeshuv_Type'] = yeshuvim.apply(
-        lambda row: find_in_dict(yeshuve_type_dict, row["SN_yeshuv"]), axis=1)
-
-
-def add_yeshuv_type_kneset(kneeset: pd.DataFrame) -> None:
-    knesset_type_dict = read_metadata_yeshuv_type_to_dict()
-    kneeset['Yeshuv_Type'] = kneeset.apply(
-        lambda row: find_in_dict(knesset_type_dict, row["SN"]), axis=1)
+        lambda row: __find_in_dict(yeshuve_type_dict, row["SN_yeshuv"]), axis=1)
 
 
 def add_voters_percent_per_knesset(yeshuvim: pd.DataFrame) -> None:

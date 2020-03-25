@@ -1,5 +1,8 @@
 from enum import Enum
 import pandas as pd
+from constants import KNESSETS_LIST
+from read_files_helper import  _YESHUVIM_METADATA_TYPE_2, \
+    _KALFI_ADDRESS_FILE, KNESSET_CLEAN_OUTPUT_FOLDER
 
 
 class PopVars(Enum):
@@ -9,7 +12,6 @@ class PopVars(Enum):
     Voters = 4
     AvgBzb = 5
     VotePercent = 6
-
 
 
 class PopulationStats(object):
@@ -71,6 +73,40 @@ class ResultKnesset():
             pop_stats = self.knessets_dict[k]['stats']
             ans.append(pop_stats.get_var(pop_var))
         return ans
+
+    def read_meta(self ):
+        self.address = pd.read_csv(_KALFI_ADDRESS_FILE)
+        self.yeshuvv = pd.read_csv(_YESHUVIM_METADATA_TYPE_2, encoding = 'ISO-8859-1' )
+
+
+    def fill_yeshuv(self):
+        df1 = self.get_kneset_data("22")
+        df1.set_index(['SN', 'Kalfi_Num'])
+        df1['Yeshuv'] = df1['SN'].map(
+            self.yeshuvv.set_index('sn')['yeshuv_name_en2'])
+
+
+
+    #merging dfs not working correctly right now, might fix if needed later on.
+    def fill_address_data(self):
+
+        # df1['address'] = df1.apply(lambda row: df2["address"] if (row.SN== df2["SN"] & row.Kalfi_Num == df2["kalfi_num"]), axis=1)
+        # df1['address'] = np.where(df.change > 0.0, 1, 0)
+
+        # target_cols = [ 'location', 'address', 'arab_printing']
+        #
+
+        # self.knessets_dict["22"]['data'] = pd.merge(df1, df2[target_cols], how='left')
+        pass
+
+
+    def save_knesset_data(self):
+
+        for knesset_num in KNESSETS_LIST:
+            kneset_df = self.get_kneset_data(knesset_num)
+
+            kneset_df.to_csv(KNESSET_CLEAN_OUTPUT_FOLDER+"_"+knesset_num+".csv")
+
 
 
 class ThresholdsResultKnesset():
